@@ -30,7 +30,7 @@ RCT_EXPORT_METHOD(setVisitorInfo:(NSDictionary *)options) {
 
 RCT_EXPORT_METHOD(startChat:(NSDictionary *)options) {
   [self setVisitorInfo:options];
-
+  [[[ZDCChat instance] overlay] setEnabled: options[@"overlay"] ? YES : NO];
   dispatch_sync(dispatch_get_main_queue(), ^{
     [ZDCChat startChat:^(ZDCConfig *config) {
       if (options[@"department"]) {
@@ -39,7 +39,7 @@ RCT_EXPORT_METHOD(startChat:(NSDictionary *)options) {
       if (options[@"tags"]) {
         config.tags = options[@"tags"];
       }
-      config.preChatDataRequirements.name       = ZDCPreChatDataRequired;
+      config.preChatDataRequirements.name       = options[@"nameNotRequired"] ? ZDCPreChatDataNotRequired : ZDCPreChatDataRequired;
       config.preChatDataRequirements.email      = options[@"emailNotRequired"] ? ZDCPreChatDataNotRequired : ZDCPreChatDataRequired;
       config.preChatDataRequirements.phone      = options[@"phoneNotRequired"] ? ZDCPreChatDataNotRequired : ZDCPreChatDataRequired;
       config.preChatDataRequirements.department = options[@"departmentNotRequired"] ? ZDCPreChatDataNotRequired : ZDCPreChatDataRequiredEditable;
